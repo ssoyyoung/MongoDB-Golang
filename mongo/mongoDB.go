@@ -32,7 +32,8 @@ func MongoDB() {
 //InsertData func in mongo pkg
 func InsertData(dataset Schema) {
 	// timeout 설정을 위한 Context 생성
-	ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
 	// Authetication 에러 처리를 위한 client option 구성
 	clientOptions := options.Client().ApplyURI("mongodb://49.247.134.77:27017").SetAuth(options.Credential{
