@@ -26,13 +26,11 @@ func MongoDB() {
 		Author: "Soyoung Park",
 		Tags:   []string{"book", "reading", "coding", "new"},
 	}
-
-	// insert data
-	insertData(dataset)
+	InsertData(dataset)
 }
 
 //InsertData func in mongo pkg
-func insertData(dataset Schema) {
+func InsertData(dataset Schema) {
 	// timeout 설정을 위한 Context 생성
 	ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
 
