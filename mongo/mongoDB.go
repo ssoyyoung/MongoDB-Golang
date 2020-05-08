@@ -1,4 +1,4 @@
-package mongo
+package mongodb
 
 import (
 	"context"
@@ -18,19 +18,20 @@ type Schema struct {
 	Tags   []string           `bson:"tags,omitempty"`
 }
 
-// golang에서 mongoDB CRUD 테스트
-func main() {
+//MongoDB :  golang에서 mongoDB CRUD 테스트
+func MongoDB() {
 	// input으로 넣을 데이터 정의 struct구조
 	dataset := Schema{
 		Title:  "CRUD Operation in MongoDB using Golang",
 		Author: "Soyoung Park",
-		Tags:   []string{"book", "reading", "coding"},
+		Tags:   []string{"book", "reading", "coding", "new"},
 	}
 
 	// insert data
 	insertData(dataset)
 }
 
+//InsertData func in mongo pkg
 func insertData(dataset Schema) {
 	// timeout 설정을 위한 Context 생성
 	ctx, _ := context.WithTimeout(context.Background(), 3*time.Second)
