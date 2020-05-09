@@ -30,15 +30,18 @@ func MongoDB() {
 	}
 	InsertData(dataset)
 
-	filter := bson.D{primitive.E{Key: "channelID", Value: "so"}}
+	filter := bson.D{primitive.E{Key: "creatorDataName", Value: "soso"}}
 	update := bson.D{
 		{
 			"$set", bson.D{
-				primitive.E{Key: "newdate", Value: 12345333999996},
+				primitive.E{Key: "newdate", Value: 199412345333999996},
 			},
 		},
 	}
 	UpdateData(filter, update)
+
+	delfilter := bson.D{primitive.E{Key: "creatorDataName", Value: "soso"}}
+	DeleteData(delfilter)
 }
 
 func connectDB() (client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
@@ -61,7 +64,22 @@ func connectDB() (client *mongo.Client, ctx context.Context, cancel context.Canc
 	return client, ctx, cancel
 }
 
-// 기존에 존재하던 Document에 새로운 필드와 값 추가 혹은 존재하는 값 변경
+// DeleteData func
+func DeleteData(filter bson.D) {
+	// DB 연결하기
+	client, ctx, cancel := connectDB()
+	// func 종료 후 mongodb 연결 끊기
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	// 특정 collection 가져오기
+	moaData := client.Database("moadata").Collection("moadata")
+
+	res, err := moaData.DeleteOne(ctx, filter)
+	checkErr(err)
+	fmt.Println(res)
+}
+
 //UpdateData func
 func UpdateData(filter bson.D, update bson.D) {
 	// DB 연결하기
