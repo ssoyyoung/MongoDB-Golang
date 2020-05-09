@@ -22,7 +22,7 @@ type Schema struct {
 
 //MongoDB :  golang에서 mongoDB CRUD 테스트
 func MongoDB() {
-	// input으로 넣을 데이터 정의 struct구조
+	/* // input으로 넣을 데이터 정의 struct구조
 	dataset := Schema{
 		Title:  "CRUD Operation in MongoDB using Golang",
 		Author: "Soyoung Park",
@@ -41,7 +41,8 @@ func MongoDB() {
 	UpdateData(filter, update)
 
 	delfilter := bson.D{primitive.E{Key: "creatorDataName", Value: "soso"}}
-	DeleteData(delfilter)
+	DeleteData(delfilter) */
+	ListData()
 }
 
 func connectDB() (client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
@@ -62,6 +63,27 @@ func connectDB() (client *mongo.Client, ctx context.Context, cancel context.Canc
 	checkErr(client.Ping(ctx, readpref.Primary()))
 
 	return client, ctx, cancel
+}
+
+// ListData func
+func ListData() {
+	// DB 연결하기
+	client, ctx, cancel := connectDB()
+	// func 종료 후 mongodb 연결 끊기
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	// 특정 collection 가져오기
+	moaData := client.Database("moadata").Collection("moadata")
+
+	res, err := moaData.Find(ctx, bson.M{})
+	checkErr(err)
+
+	var datas []bson.M
+	if err = res.All(ctx, &datas); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(datas)
 }
 
 // DeleteData func
