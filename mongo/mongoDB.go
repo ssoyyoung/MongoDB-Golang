@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -22,7 +23,7 @@ type Schema struct {
 
 //MongoDB :  golang에서 mongoDB CRUD 테스트
 func MongoDB() {
-	/* // input으로 넣을 데이터 정의 struct구조
+	// input으로 넣을 데이터 정의 struct구조
 	dataset := Schema{
 		Title:  "CRUD Operation in MongoDB using Golang",
 		Author: "Soyoung Park",
@@ -41,7 +42,7 @@ func MongoDB() {
 	UpdateData(filter, update)
 
 	delfilter := bson.D{primitive.E{Key: "creatorDataName", Value: "soso"}}
-	DeleteData(delfilter) */
+	DeleteData(delfilter)
 	ListData()
 }
 
@@ -66,7 +67,7 @@ func connectDB() (client *mongo.Client, ctx context.Context, cancel context.Canc
 }
 
 // ListData func
-func ListData() {
+func ListData() string {
 	// DB 연결하기
 	client, ctx, cancel := connectDB()
 	// func 종료 후 mongodb 연결 끊기
@@ -74,7 +75,7 @@ func ListData() {
 	defer cancel()
 
 	// 특정 collection 가져오기
-	moaData := client.Database("moadata").Collection("moadata")
+	moaData := client.Database("meerkatonair").Collection("live_list")
 
 	res, err := moaData.Find(ctx, bson.M{})
 	checkErr(err)
@@ -84,6 +85,14 @@ func ListData() {
 		fmt.Println(err)
 	}
 	fmt.Println(datas)
+
+	jsonBytes, err := json.Marshal(datas)
+	checkErr(err)
+
+	jsonString := string(jsonBytes)
+	fmt.Println(jsonString)
+
+	return jsonString
 }
 
 // DeleteData func
@@ -95,7 +104,7 @@ func DeleteData(filter bson.D) {
 	defer cancel()
 
 	// 특정 collection 가져오기
-	moaData := client.Database("moadata").Collection("moadata")
+	moaData := client.Database("meerkatonair").Collection("live_list")
 
 	res, err := moaData.DeleteOne(ctx, filter)
 	checkErr(err)
