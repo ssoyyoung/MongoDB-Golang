@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
 
@@ -24,6 +25,10 @@ func getList(c echo.Context) error {
 
 func main() {
 	e := echo.New()
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://localhost", "https://49.247.134.77"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 	e.GET("/", goPage)
 	e.GET("/saveData", saveHandler)
 	e.GET("/getList", getList)
