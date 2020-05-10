@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
 
@@ -26,7 +25,7 @@ func getList(c echo.Context) error {
 func main() {
 	e := echo.New()
 
-	e.Use(CORSMiddlewareWrapper)
+	//e.Use(CORSMiddlewareWrapper)
 	//e.Use(middleware.CORS())
 	//e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 	//	AllowOrigins: []string{"*"},
@@ -40,7 +39,7 @@ func main() {
 }
 
 // CORSMiddlewareWrapper func
-func CORSMiddlewareWrapper(next echo.HandlerFunc) echo.HandlerFunc {
+/* func CORSMiddlewareWrapper(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		req := ctx.Request()
 		dynamicCORSConfig := middleware.CORSConfig{
@@ -51,4 +50,4 @@ func CORSMiddlewareWrapper(next echo.HandlerFunc) echo.HandlerFunc {
 		CORSHandler := CORSMiddleware(next)
 		return CORSHandler(ctx)
 	}
-}
+} */
