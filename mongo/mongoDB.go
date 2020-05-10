@@ -77,7 +77,8 @@ func ListData() string {
 	// 특정 collection 가져오기
 	moaData := client.Database("meerkatonair").Collection("live_list")
 
-	res, err := moaData.Find(ctx, bson.M{})
+	res, err := moaData.Find(ctx, bson.M{"onLive": true})
+	fmt.Println(res)
 	checkErr(err)
 
 	var datas []bson.M
