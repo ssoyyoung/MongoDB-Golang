@@ -24,7 +24,7 @@ func getList(c echo.Context) error {
 
 func main() {
 	e := echo.New()
-
+	
 	//e.Use(CORSMiddlewareWrapper)
 	//e.Use(middleware.CORS())
 	//e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
