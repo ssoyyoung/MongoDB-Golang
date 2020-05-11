@@ -85,13 +85,13 @@ func ListData() string {
 	if err = res.All(ctx, &datas); err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(datas)
+	//fmt.Println(datas)
 
 	jsonBytes, err := json.Marshal(datas)
 	checkErr(err)
 
 	jsonString := string(jsonBytes)
-	fmt.Println(jsonString)
+	//fmt.Println(jsonString)
 
 	return jsonString
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-
+	"fmt"
 	"github.com/labstack/echo"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
@@ -17,6 +17,7 @@ func saveHandler(c echo.Context) error {
 }
 
 func getList(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin","*")
 	res := mongodb.ListData()
 
 	return c.String(http.StatusOK, res)
