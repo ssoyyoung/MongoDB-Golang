@@ -36,9 +36,9 @@ func getStreamers(c echo.Context) error {
 
 func getStreamerByID(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	channelID := c.Param("id")
-	fmt.Println(channelID)
-	res := mongodb.SearchDBbyID(channelID)
+	_id := c.Param("_id")
+	fmt.Println(_id)
+	res := mongodb.SearchDBbyID(_id)
 
 	return c.String(http.StatusOK, res)
 }
