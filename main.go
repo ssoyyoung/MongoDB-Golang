@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -25,9 +26,19 @@ func getList(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
+///////////////////ADMIN FUNC///////////////////
 func getStreamers(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	res := mongodb.CrawlList()
+
+	return c.String(http.StatusOK, res)
+}
+
+func getStreamersByID(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	channelID := c.Param("id")
+	fmt.Println(channelID)
+	res := mongodb.SearchDBbyID(channelID)
 
 	return c.String(http.StatusOK, res)
 }
@@ -39,6 +50,7 @@ func main() {
 	e.GET("/saveData", saveHandler)
 	e.GET("/getList", getList)
 	e.GET("/getStreamers", getStreamers)
+	e.GET("/getStreamers/:id", getStreamersByID)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
