@@ -108,6 +108,7 @@ func SearchDBbyID(id string) string {
 	// 특정 collection 가져오기
 	moaData := client.Database("meerkatonair").Collection("crawl_target")
 
+	// _id type 변환작업
 	docID, err := primitive.ObjectIDFromHex(id)
 	checkErr(err)
 	res, err := moaData.Find(ctx, bson.M{"_id": docID})
@@ -126,6 +127,30 @@ func SearchDBbyID(id string) string {
 	//fmt.Println(jsonString)
 
 	return jsonString
+}
+
+// DeleteDBbyID func
+func DeleteDBbyID(id string) string {
+	// DB 연결하기
+	client, ctx, cancel := connectDB()
+	// func 종료 후 mongodb 연결 끊기
+	defer client.Disconnect(ctx)
+	defer cancel()
+	fmt.Println(id)
+	// 특정 collection 가져오기
+	moaData := client.Database("meerkatonair").Collection("crawl_target")
+
+	// _id type 변환작업
+	docID, err := primitive.ObjectIDFromHex(id)
+	checkErr(err)
+
+	//delfilter := bson.D{primitive.E{Key: "_id", Value: docID}}
+	delfilter := bson.M{"_id": docID}
+	res, err := moaData.DeleteOne(ctx, delfilter)
+	checkErr(err)
+	fmt.Println(res)
+
+	return "delete!"
 }
 
 ////////////////////////TEST FUNCTION////////////////////////////
