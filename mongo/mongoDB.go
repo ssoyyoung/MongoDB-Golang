@@ -98,17 +98,19 @@ func CrawlList() string {
 }
 
 // SearchDBbyID func
-func SearchDBbyID(_id string) string {
+func SearchDBbyID(id string) string {
 	// DB 연결하기
 	client, ctx, cancel := connectDB()
 	// func 종료 후 mongodb 연결 끊기
 	defer client.Disconnect(ctx)
 	defer cancel()
-
+	fmt.Println(id)
 	// 특정 collection 가져오기
 	moaData := client.Database("meerkatonair").Collection("crawl_target")
 
-	res, err := moaData.Find(ctx, bson.M{"_id": _id})
+	docID, err := primitive.ObjectIDFromHex(id)
+	checkErr(err)
+	res, err := moaData.Find(ctx, bson.M{"_id": docID})
 	fmt.Println(res)
 	checkErr(err)
 

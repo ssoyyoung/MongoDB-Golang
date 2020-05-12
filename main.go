@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo"
@@ -36,9 +35,8 @@ func getStreamers(c echo.Context) error {
 
 func getStreamerByID(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	_id := c.Param("_id")
-	fmt.Println(_id)
-	res := mongodb.SearchDBbyID(_id)
+	id := c.Param("id")
+	res := mongodb.SearchDBbyID(id)
 
 	return c.String(http.StatusOK, res)
 }
