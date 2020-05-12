@@ -18,6 +18,8 @@ func saveHandler(c echo.Context) error {
 
 func getList(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 	res := mongodb.ListData()
 
 	return c.String(http.StatusOK, res)
