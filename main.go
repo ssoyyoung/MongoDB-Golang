@@ -34,7 +34,7 @@ func getStreamers(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
-func getStreamersByID(c echo.Context) error {
+func getStreamerByID(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	channelID := c.Param("id")
 	fmt.Println(channelID)
@@ -50,7 +50,7 @@ func main() {
 	e.GET("/saveData", saveHandler)
 	e.GET("/getList", getList)
 	e.GET("/getStreamers", getStreamers)
-	e.GET("/getStreamers/:id", getStreamersByID)
+	e.GET("/getStreamer/:id", getStreamerByID)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
