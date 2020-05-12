@@ -25,12 +25,20 @@ func getList(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
+func getStreamers(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	res := mongodb.CrawlList()
+
+	return c.String(http.StatusOK, res)
+}
+
 func main() {
 	e := echo.New()
 
 	e.GET("/", goPage)
 	e.GET("/saveData", saveHandler)
 	e.GET("/getList", getList)
+	e.GET("/getStreamers", getStreamers)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -66,6 +66,35 @@ func connectDB() (client *mongo.Client, ctx context.Context, cancel context.Canc
 	return client, ctx, cancel
 }
 
+// CrawlList func
+func CrawlList() string {
+	// DB 연결하기
+	client, ctx, cancel := connectDB()
+	// func 종료 후 mongodb 연결 끊기
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	// 특정 collection 가져오기
+	moaData := client.Database("meerkatonair").Collection("crawl_target")
+
+	res, err := moaData.Find(ctx, bson.M{})
+	fmt.Println(res)
+	checkErr(err)
+
+	var datas []bson.M
+	if err = res.All(ctx, &datas); err != nil {
+		fmt.Println(err)
+	}
+
+	jsonBytes, err := json.Marshal(datas)
+	checkErr(err)
+
+	jsonString := string(jsonBytes)
+	//fmt.Println(jsonString)
+
+	return jsonString
+}
+
 // ListData func
 func ListData() string {
 	// DB 연결하기
