@@ -23,7 +23,7 @@ type Schema struct {
 
 // CrawlTarget struct
 type CrawlTarget struct {
-	ID        primitive.ObjectID
+	//ID        primitive.ObjectID
 	Platform  string
 	Channel   string
 	ChannelID string
