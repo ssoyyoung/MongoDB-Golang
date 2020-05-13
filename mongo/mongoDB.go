@@ -153,6 +153,26 @@ func DeleteDBbyID(id string) string {
 	return "delete!"
 }
 
+func UpdateDBbyID(id string) string {
+	client, ctx, cancel := connectDB()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	moaData := client.Database("meerkatonair").Collection("crawl_target")
+	fmt.Println(moaData)
+	docID, err := primitive.ObjectIDFromHex(id)
+	checkErr(err)
+	
+	fmt.Println("here...")
+	fmt.Println(docID)
+	// TODO
+	//filter := bson.M{"_id": docID}
+	//update := 
+	//res, err := moaData.UpdateOne(ctx, filter, update)
+
+	return "good"
+}
+
 ////////////////////////TEST FUNCTION////////////////////////////
 
 // ListData func
