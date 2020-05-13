@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-
+	"fmt"
 	"github.com/labstack/echo"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
@@ -18,7 +18,7 @@ func saveHandler(c echo.Context) error {
 
 func getList(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	c.Response().Header().Set("Access-Control-Allow-Methods", "POST")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
 	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 	res := mongodb.ListData()
 
@@ -59,6 +59,11 @@ func updateStreamer(c echo.Context) error {
 
 func createStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+
+	fmt.Println("test")
+	fmt.Println(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 	res := mongodb.CreateDB(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 
 	return c.String(http.StatusOK, res)
@@ -74,7 +79,7 @@ func main() {
 	e.GET("/getStreamer/:id", getStreamerByID)
 	e.GET("/deleteStreamer/:id", deleteStreamer)
 	e.GET("/updateStreamer/:id", updateStreamer)
-	e.GET("/createStreamer", createStreamer)
+	e.POST("/createStreamer", createStreamer)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
