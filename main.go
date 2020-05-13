@@ -1,8 +1,9 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
+
 	"github.com/labstack/echo"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
@@ -43,6 +44,8 @@ func getStreamerByID(c echo.Context) error {
 
 func deleteStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "DELETE, GET")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 	id := c.Param("id")
 	res := mongodb.DeleteDBbyID(id)
 
@@ -51,6 +54,8 @@ func deleteStreamer(c echo.Context) error {
 
 func updateStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "PUT, GET")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 	id := c.Param("id")
 	res := mongodb.UpdateDBbyID(id)
 
@@ -77,8 +82,8 @@ func main() {
 	e.GET("/getList", getList)
 	e.GET("/getStreamers", getStreamers)
 	e.GET("/getStreamer/:id", getStreamerByID)
-	e.GET("/deleteStreamer/:id", deleteStreamer)
-	e.GET("/updateStreamer/:id", updateStreamer)
+	e.DELETE("/deleteStreamer/:id", deleteStreamer)
+	e.PUT("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
 
 	e.Logger.Fatal(e.Start(":1323"))
