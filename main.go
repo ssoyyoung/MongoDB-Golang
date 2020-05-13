@@ -57,6 +57,13 @@ func updateStreamer(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
+func createStreamer(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	res := mongodb.CreateDB(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
+
+	return c.String(http.StatusOK, res)
+}
+
 func main() {
 	e := echo.New()
 
@@ -67,6 +74,7 @@ func main() {
 	e.GET("/getStreamer/:id", getStreamerByID)
 	e.GET("/deleteStreamer/:id", deleteStreamer)
 	e.GET("/updateStreamer/:id", updateStreamer)
+	e.GET("/createStreamer", createStreamer)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

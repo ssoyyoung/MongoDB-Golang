@@ -13,12 +13,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
-//Schema data struct
+// Schema data struct
 type Schema struct {
 	ID     primitive.ObjectID `bson:"_id,omitempty"`
 	Title  string             `bson:"title,omitempty"`
 	Author string             `bson:"author,omitempty"`
 	Tags   []string           `bson:"tags,omitempty"`
+}
+
+// CrawlTarget struct
+type CrawlTarget struct {
+	ID        primitive.ObjectID
+	Platform  string
+	Channel   string
+	ChannelID string
 }
 
 //MongoDB :  golang에서 mongoDB CRUD 테스트
@@ -153,6 +161,7 @@ func DeleteDBbyID(id string) string {
 	return "delete!"
 }
 
+//UpdateDBbyID func
 func UpdateDBbyID(id string) string {
 	client, ctx, cancel := connectDB()
 	defer client.Disconnect(ctx)
@@ -162,15 +171,36 @@ func UpdateDBbyID(id string) string {
 	fmt.Println(moaData)
 	docID, err := primitive.ObjectIDFromHex(id)
 	checkErr(err)
-	
+
 	fmt.Println("here...")
 	fmt.Println(docID)
 	// TODO
 	//filter := bson.M{"_id": docID}
-	//update := 
+	//update :=
 	//res, err := moaData.UpdateOne(ctx, filter, update)
 
 	return "good"
+}
+
+// CreateDB func
+func CreateDB(platform, channel, channelID string) string {
+	client, ctx, cancel := connectDB()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	moaData := client.Database("meerkatonair").Collection("crawl_target")
+
+	newData := CrawlTarget{
+		Platform:  platform,
+		Channel:   channel,
+		ChannelID: channelID,
+	}
+	// data insert 처리
+	res, err := moaData.InsertOne(ctx, newData)
+	fmt.Println(res)
+	checkErr(err)
+
+	return "create!"
 }
 
 ////////////////////////TEST FUNCTION////////////////////////////
