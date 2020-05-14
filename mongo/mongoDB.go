@@ -23,10 +23,10 @@ type Schema struct {
 
 // CrawlTarget struct
 type CrawlTarget struct {
-	//ID        primitive.ObjectID
-	Platform  string
-	Channel   string
-	ChannelID string
+	ID        primitive.ObjectID `bson:"_id,omitempty"`
+	Platform  string	     `bson:"platform,omitempty"`
+	Channel   string	     `bson:"channel,omitempty"`
+	ChannelID string	     `bson:"channelID,omitempty"`
 }
 
 //MongoDB :  golang에서 mongoDB CRUD 테스트
@@ -162,7 +162,7 @@ func DeleteDBbyID(id string) string {
 }
 
 //UpdateDBbyID func
-func UpdateDBbyID(id string) string {
+func UpdateDBbyID(id, platform, channel, channelID string) string {
 	client, ctx, cancel := connectDB()
 	defer client.Disconnect(ctx)
 	defer cancel()
@@ -171,15 +171,23 @@ func UpdateDBbyID(id string) string {
 	fmt.Println(moaData)
 	docID, err := primitive.ObjectIDFromHex(id)
 	checkErr(err)
-
-	fmt.Println("here...")
 	fmt.Println(docID)
-	// TODO
-	//filter := bson.M{"_id": docID}
-	//update :=
-	//res, err := moaData.UpdateOne(ctx, filter, update)
 
-	return "good"
+	filter := bson.M{"_id": docID}
+
+	update := bson.D{
+		{"$set", bson.D{
+				{"platform", platform},
+				{"channel", channel},
+				{"channelID", channelID},
+			},
+		},
+	}
+	res, err := moaData.UpdateOne(ctx, filter, update)
+	fmt.Println(res)
+	checkErr(err)
+
+	return "updated!"
 }
 
 // CreateDB func

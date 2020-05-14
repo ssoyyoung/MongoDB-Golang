@@ -54,10 +54,11 @@ func deleteStreamer(c echo.Context) error {
 
 func updateStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	c.Response().Header().Set("Access-Control-Allow-Methods", "PUT, GET")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
 	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 	id := c.Param("id")
-	res := mongodb.UpdateDBbyID(id)
+	fmt.Println(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
+	res := mongodb.UpdateDBbyID(id, c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 
 	return c.String(http.StatusOK, res)
 }
@@ -82,8 +83,8 @@ func main() {
 	e.GET("/getList", getList)
 	e.GET("/getStreamers", getStreamers)
 	e.GET("/getStreamer/:id", getStreamerByID)
-	e.DELETE("/deleteStreamer/:id", deleteStreamer)
-	e.PUT("/updateStreamer/:id", updateStreamer)
+	e.GET("/deleteStreamer/:id", deleteStreamer)
+	e.POST("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
 
 	e.Logger.Fatal(e.Start(":1323"))
