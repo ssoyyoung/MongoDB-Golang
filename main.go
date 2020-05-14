@@ -75,6 +75,17 @@ func createStreamer(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
+func userInfo(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+
+	fmt.Println("userInfo")
+	fmt.Println(c)
+
+	return c.String(http.StatusOK, "userinfo")
+}
+
 // Login Func
 // Token 처리
 
@@ -89,6 +100,7 @@ func main() {
 	e.GET("/deleteStreamer/:id", deleteStreamer)
 	e.POST("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
+	e.GET("/userInfo", userInfo)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
