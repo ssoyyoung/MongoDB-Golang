@@ -75,6 +75,9 @@ func createStreamer(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
+// Login Func
+// Token 처리
+
 func main() {
 	e := echo.New()
 
