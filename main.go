@@ -100,7 +100,7 @@ func main() {
 	e.GET("/deleteStreamer/:id", deleteStreamer)
 	e.POST("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
-	e.GET("/userInfo", userInfo)
+	e.POST("/userInfo", userInfo)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
