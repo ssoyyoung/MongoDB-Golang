@@ -26,7 +26,7 @@ func getList(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
-///////////////////ADMIN FUNC///////////////////
+///////////////////Meerkat CRUD FUNC///////////////////
 func getStreamers(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	res := mongodb.CrawlList()
