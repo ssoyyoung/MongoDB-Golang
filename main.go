@@ -78,7 +78,7 @@ func createStreamer(c echo.Context) error {
 	return c.String(http.StatusOK, res)
 }
 
-func userInfo(c echo.Context) error {
+func userInfo2(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "*")
 	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
@@ -157,11 +157,11 @@ func main() {
 	e.GET("/deleteStreamer/:id", deleteStreamer)
 	e.POST("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
-	e.POST("/userInfo", userInfo)
+	e.POST("/userInfo2", userInfo2)
 
 	h := &handler{}
 	//Login Func
-	e.POST("/login", h.login)
+	e.POST("/userInfo", h.login)
 	e.GET("/admin", h.private, isLoggedIn, isAdmin)
 
 	e.Logger.Fatal(e.Start(":1323"))
