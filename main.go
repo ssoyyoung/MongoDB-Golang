@@ -97,8 +97,9 @@ type handler struct{}
 func (h *handler) login(c echo.Context) error {
 	googleID := c.FormValue("googleId")
 	name := c.FormValue("name")
+	email := c.FormValue("email")
 
-	res := mongodb.CheckUser(googleID, name)
+	res := mongodb.CheckUser(googleID, name, email)
 	if res {
 		// Create token
 		token := jwt.New(jwt.SigningMethodHS256)

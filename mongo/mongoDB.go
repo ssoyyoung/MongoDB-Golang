@@ -212,7 +212,7 @@ func CreateDB(platform, channel, channelID string) string {
 }
 
 //CheckUser func
-func CheckUser(googleID, name string) bool {
+func CheckUser(googleID, name, email string) bool {
 	client, ctx, cancel := connectDB()
 	defer client.Disconnect(ctx)
 	defer cancel()
@@ -222,12 +222,12 @@ func CheckUser(googleID, name string) bool {
 	res, err := userInfo.CountDocuments(ctx, bson.M{"googleId": googleID, "name": name})
 	checkErr(err)
 	if res == 0 {
-		createUser(googleID, name)
+		createUser(googleID, name, email)
 	}
 	return true
 }
 
-func createUser(googleID, name string) {
+func createUser(googleID, name, email string) {
 	client, ctx, cancel := connectDB()
 	defer client.Disconnect(ctx)
 	defer cancel()
@@ -237,6 +237,7 @@ func createUser(googleID, name string) {
 	res, err := userInfo.InsertOne(ctx, bson.M{
 		"googleId": googleID,
 		"name":     name,
+		"email":    email,
 	})
 	fmt.Println(res)
 	checkErr(err)
