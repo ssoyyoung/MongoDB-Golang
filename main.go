@@ -118,6 +118,7 @@ func (h *handler) login(c echo.Context) error {
 		if err != nil {
 			return err
 		}
+		mongodb.UpdateUser(googleID, t)
 		return c.JSON(http.StatusOK, map[string]string{
 			"token": t,
 		})

@@ -243,6 +243,26 @@ func createUser(googleID, name, email string) {
 	checkErr(err)
 }
 
+func UpdateUser(googleID, token string) {
+	client, ctx, cancel := connectDB()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	userInfo := client.Database("meerkatonair").Collection("user_info")
+
+	filter := bson.M{"googleId": googleID}
+
+	update := bson.D{
+		{"$set", bson.D{
+			{"token", token},
+		},
+		},
+	}
+	res, err := userInfo.UpdateOne(ctx, filter, update)
+	fmt.Println(res)
+	checkErr(err)
+}
+
 ////////////////////////TEST FUNCTION////////////////////////////
 
 // ListData func
