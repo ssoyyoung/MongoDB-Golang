@@ -95,6 +95,10 @@ func userInfo2(c echo.Context) error {
 type handler struct{}
 
 func (h *handler) login(c echo.Context) error {
+	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+
 	googleID := c.FormValue("googleId")
 	name := c.FormValue("name")
 	email := c.FormValue("email")
