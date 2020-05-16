@@ -13,6 +13,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
 
+//Schema struct
+type Schema struct {
+ 	ID     primitive.ObjectID `bson:"_id,omitempty"`
+ 	Title  string             `bson:"title,omitempty"`
+ 	Author string             `bson:"author,omitempty"`
+ 	Tags   []string           `bson:"tags,omitempty"`
+ }
+
 // CrawlTarget struct
 type CrawlTarget struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`

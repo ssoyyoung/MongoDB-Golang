@@ -77,11 +77,12 @@ func createStreamer(c echo.Context) error {
 
 func userInfo(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
+	c.Response().Header().Set("Access-Control-Allow-Methods", "*")
 	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
 
 	fmt.Println("userInfo")
 	fmt.Println(c)
+	fmt.Println(c.FormValue("email"), c.FormValue("name"), c.FormValue("googleId"), c.FormValue("imageUrl"))
 
 	return c.String(http.StatusOK, "userinfo")
 }
