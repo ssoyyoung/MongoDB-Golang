@@ -15,18 +15,18 @@ import (
 
 //Schema struct
 type Schema struct {
- 	ID     primitive.ObjectID `bson:"_id,omitempty"`
- 	Title  string             `bson:"title,omitempty"`
- 	Author string             `bson:"author,omitempty"`
- 	Tags   []string           `bson:"tags,omitempty"`
- }
+	ID     primitive.ObjectID `bson:"_id,omitempty"`
+	Title  string             `bson:"title,omitempty"`
+	Author string             `bson:"author,omitempty"`
+	Tags   []string           `bson:"tags,omitempty"`
+}
 
 // CrawlTarget struct
 type CrawlTarget struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty"`
-	Platform  string	     `bson:"platform,omitempty"`
-	Channel   string	     `bson:"channel,omitempty"`
-	ChannelID string	     `bson:"channelID,omitempty"`
+	Platform  string             `bson:"platform,omitempty"`
+	Channel   string             `bson:"channel,omitempty"`
+	ChannelID string             `bson:"channelID,omitempty"`
 }
 
 //MongoDB :  golang에서 mongoDB CRUD 테스트
@@ -177,10 +177,10 @@ func UpdateDBbyID(id, platform, channel, channelID string) string {
 
 	update := bson.D{
 		{"$set", bson.D{
-				{"platform", platform},
-				{"channel", channel},
-				{"channelID", channelID},
-			},
+			{"platform", platform},
+			{"channel", channel},
+			{"channelID", channelID},
+		},
 		},
 	}
 	res, err := moaData.UpdateOne(ctx, filter, update)
@@ -209,6 +209,37 @@ func CreateDB(platform, channel, channelID string) string {
 	checkErr(err)
 
 	return "create!"
+}
+
+//CheckUser func
+func CheckUser(googleID, name string) bool {
+	client, ctx, cancel := connectDB()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	userInfo := client.Database("meerkatonair").Collection("user_info")
+
+	res, err := userInfo.CountDocuments(ctx, bson.M{"googleId": googleID, "name": name})
+	checkErr(err)
+	if res == 0 {
+		createUser(googleID, name)
+	}
+	return true
+}
+
+func createUser(googleID, name string) {
+	client, ctx, cancel := connectDB()
+	defer client.Disconnect(ctx)
+	defer cancel()
+
+	userInfo := client.Database("meerkatonair").Collection("user_info")
+
+	res, err := userInfo.InsertOne(ctx, bson.M{
+		"googleId": googleID,
+		"name":     name,
+	})
+	fmt.Println(res)
+	checkErr(err)
 }
 
 ////////////////////////TEST FUNCTION////////////////////////////

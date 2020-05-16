@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	mongodb "github.com/ssoyyoung.p/MongoDB-Golang/mongo"
 )
 
@@ -88,7 +91,59 @@ func userInfo(c echo.Context) error {
 }
 
 // Login Func
-// Token 처리
+
+type handler struct{}
+
+func (h *handler) login(c echo.Context) error {
+	googleID := c.FormValue("googleId")
+	name := c.FormValue("name")
+
+	res := mongodb.CheckUser(googleID, name)
+	if res {
+		// Create token
+		token := jwt.New(jwt.SigningMethodHS256)
+
+		claims := token.Claims.(jwt.MapClaims)
+		claims["name"] = name
+		claims["googleId"] = googleID
+		claims["admin"] = true
+		claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+		t, err := token.SignedString([]byte("secret"))
+		if err != nil {
+			return err
+		}
+		return c.JSON(http.StatusOK, map[string]string{
+			"token": t,
+		})
+	}
+	return echo.ErrUnauthorized
+}
+
+func (h *handler) private(c echo.Context) error {
+	fmt.Println(c.Get("user"))
+	user := c.Get("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	name := claims["name"].(string)
+	return c.String(http.StatusOK, "Welcome "+name+"!")
+}
+
+//IsLoggedIn FUNC
+var isLoggedIn = middleware.JWTWithConfig(middleware.JWTConfig{
+	SigningKey: []byte("secret"),
+})
+
+func isAdmin(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(jwt.MapClaims)
+		isAdmin := claims["admin"].(bool)
+		if isAdmin == false {
+			return echo.ErrUnauthorized
+		}
+		return next(c)
+	}
+}
 
 func main() {
 	e := echo.New()
@@ -102,6 +157,11 @@ func main() {
 	e.POST("/updateStreamer/:id", updateStreamer)
 	e.POST("/createStreamer", createStreamer)
 	e.POST("/userInfo", userInfo)
+
+	h := &handler{}
+	//Login Func
+	e.POST("/login", h.login)
+	e.GET("/admin", h.private, isLoggedIn, isAdmin)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }
