@@ -23,7 +23,7 @@ func saveHandler(c echo.Context) error {
 func getList(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 	res := mongodb.ListData()
 
 	return c.String(http.StatusOK, res)
@@ -48,7 +48,7 @@ func getStreamerByID(c echo.Context) error {
 func deleteStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "DELETE, GET")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 	id := c.Param("id")
 	res := mongodb.DeleteDBbyID(id)
 
@@ -58,7 +58,7 @@ func deleteStreamer(c echo.Context) error {
 func updateStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 	id := c.Param("id")
 	fmt.Println(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 	res := mongodb.UpdateDBbyID(id, c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
@@ -69,7 +69,7 @@ func updateStreamer(c echo.Context) error {
 func createStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 
 	fmt.Println("test")
 	fmt.Println(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
@@ -81,7 +81,7 @@ func createStreamer(c echo.Context) error {
 func userInfo2(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "*")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 
 	fmt.Println("userInfo")
 	fmt.Println(c)
@@ -97,7 +97,7 @@ type handler struct{}
 func (h *handler) login(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
 	c.Response().Header().Set("Access-Control-Allow-Methods", "*")
-	c.Response().Header().Set("Access-Control-Allow-Headers", "application/json text/plain */*")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 
 	googleID := c.FormValue("googleId")
 	name := c.FormValue("name")
