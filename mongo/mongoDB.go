@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -54,14 +56,37 @@ func MongoDB() {
 	ListData()
 }
 
+//Auth struct
+type Auth struct {
+	Username string
+	Password string
+	Hostname string
+	Port     string
+}
+
+func getAuth() Auth {
+	data, err := os.Open("mongo/mongodb_auth.json")
+	checkErr(err)
+
+	var auth Auth
+
+	byteValue, _ := ioutil.ReadAll(data)
+	fmt.Println(byteValue)
+	json.Unmarshal(byteValue, &auth)
+
+	return auth
+}
+
 func connectDB() (client *mongo.Client, ctx context.Context, cancel context.CancelFunc) {
 	// Timeout 설정을 위한 Context생성
 	ctx, cancel = context.WithTimeout(context.Background(), 3*time.Second)
 
+	Authrization := getAuth()
+
 	// Auth에러 처리를 위한 client option 구성
-	clientOptions := options.Client().ApplyURI("mongodb://49.247.134.77:27017").SetAuth(options.Credential{
-		Username: "admin",
-		Password: "pwdtlchd50wh",
+	clientOptions := options.Client().ApplyURI("mongodb://" + Authrization.Hostname + Authrization.Port).SetAuth(options.Credential{
+		Username: Authrization.Username,
+		Password: Authrization.Password,
 	})
 
 	// MongoDB 연결
