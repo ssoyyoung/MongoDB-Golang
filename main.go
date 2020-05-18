@@ -131,6 +131,7 @@ func (h *handler) private(c echo.Context) error {
 	user := c.Get("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	name := claims["name"].(string)
+
 	return c.String(http.StatusOK, "Welcome "+name+"!")
 }
 
@@ -153,6 +154,7 @@ func isAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 
 //ToDo
 //Update Token and Refresh Token
+//Update Header Authorization
 
 func main() {
 	e := echo.New()
@@ -170,6 +172,7 @@ func main() {
 	h := &handler{}
 	//Login Func
 	e.POST("/userInfo", h.login)
+	e.GET("/private", h.private, isLoggedIn)
 	e.GET("/admin", h.private, isLoggedIn, isAdmin)
 
 	e.Logger.Fatal(e.Start(":1323"))

@@ -71,7 +71,6 @@ func getAuth() Auth {
 	var auth Auth
 
 	byteValue, _ := ioutil.ReadAll(data)
-	fmt.Println(byteValue)
 	json.Unmarshal(byteValue, &auth)
 
 	return auth
