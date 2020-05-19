@@ -229,6 +229,7 @@ func CreateDB(platform, channel, channelID string) string {
 	}
 	// data insert 처리
 	res, err := moaData.InsertOne(ctx, newData)
+	fmt.Println(platform, channel, channelID)
 	fmt.Println(res)
 	checkErr(err)
 

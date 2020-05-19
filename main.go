@@ -72,7 +72,7 @@ func createStreamer(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
 
 	fmt.Println("test")
-	fmt.Println(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
+	fmt.Println("here..", c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 	res := mongodb.CreateDB(c.FormValue("platform"), c.FormValue("channel"), c.FormValue("channelID"))
 
 	return c.String(http.StatusOK, res)
