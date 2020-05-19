@@ -164,9 +164,9 @@ func main() {
 	e.GET("/getList", getList)
 	e.GET("/getStreamers", getStreamers)
 	e.GET("/getStreamer/:id", getStreamerByID)
-	e.GET("/deleteStreamer/:id", deleteStreamer)
-	e.POST("/updateStreamer/:id", updateStreamer)
-	e.POST("/createStreamer", createStreamer)
+	e.GET("/deleteStreamer/:id", deleteStreamer, isLoggedIn)
+	e.POST("/updateStreamer/:id", updateStreamer, isLoggedIn)
+	e.POST("/createStreamer", createStreamer, isLoggedIn)
 	e.POST("/userInfo2", userInfo2)
 
 	h := &handler{}
