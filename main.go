@@ -158,7 +158,7 @@ func isAdmin(next echo.HandlerFunc) echo.HandlerFunc {
 
 func main() {
 	e := echo.New()
-	
+
 	e.Use(middleware.CORS())
 
 	e.GET("/", goPage)
