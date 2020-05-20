@@ -99,9 +99,8 @@ func connectDB() (client *mongo.Client, ctx context.Context, cancel context.Canc
 }
 
 ////////////////////////ADMIN FUNCTION////////////////////////////
-
-// CrawlList func
-func CrawlList() string {
+// ListData func
+func ListData() string {
 	// DB 연결하기
 	client, ctx, cancel := connectDB()
 	// func 종료 후 mongodb 연결 끊기
@@ -109,9 +108,12 @@ func CrawlList() string {
 	defer cancel()
 
 	// 특정 collection 가져오기
-	moaData := client.Database("meerkatonair").Collection("crawl_target")
+	moaData := client.Database("meerkatonair").Collection("live_list")
 
-	res, err := moaData.Find(ctx, bson.M{})
+	findOptions := options.Find()
+	findOptions.SetSort(bson.D{{"liveAttdc", -1}})
+
+	res, err := moaData.Find(ctx, bson.M{"onLive": true}, findOptions)
 	fmt.Println(res)
 	checkErr(err)
 
@@ -124,7 +126,6 @@ func CrawlList() string {
 	checkErr(err)
 
 	jsonString := string(jsonBytes)
-	//fmt.Println(jsonString)
 
 	return jsonString
 }
@@ -289,36 +290,6 @@ func UpdateUser(googleID, token string) {
 }
 
 ////////////////////////TEST FUNCTION////////////////////////////
-
-// ListData func
-func ListData() string {
-	// DB 연결하기
-	client, ctx, cancel := connectDB()
-	// func 종료 후 mongodb 연결 끊기
-	defer client.Disconnect(ctx)
-	defer cancel()
-
-	// 특정 collection 가져오기
-	moaData := client.Database("meerkatonair").Collection("live_list")
-
-	res, err := moaData.Find(ctx, bson.M{"onLive": true})
-	fmt.Println(res)
-	checkErr(err)
-
-	var datas []bson.M
-	if err = res.All(ctx, &datas); err != nil {
-		fmt.Println(err)
-	}
-	//fmt.Println(datas)
-
-	jsonBytes, err := json.Marshal(datas)
-	checkErr(err)
-
-	jsonString := string(jsonBytes)
-	//fmt.Println(jsonString)
-
-	return jsonString
-}
 
 // DeleteData func
 func DeleteData(filter bson.D) {

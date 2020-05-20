@@ -32,7 +32,9 @@ func getList(c echo.Context) error {
 ///////////////////Meerkat CRUD FUNC///////////////////
 func getStreamers(c echo.Context) error {
 	c.Response().Header().Set("Access-Control-Allow-Origin", "*")
-	res := mongodb.CrawlList()
+	c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET")
+	c.Response().Header().Set("Access-Control-Allow-Headers", "*")
+	res := mongodb.ListData()
 
 	return c.String(http.StatusOK, res)
 }
